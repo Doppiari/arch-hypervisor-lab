@@ -131,8 +131,10 @@ Compare the saved check/diff and both apply commands: all three must name
 The [v1 host target](https://github.com/importriri/hyperlab-ansible/blob/main/playbooks/v1-host.yml)
 also stages managed Hyprland/Quickshell sessions and the VFIO sleep guard.
 Staging selects no Ly default, starts no compositor and proves no login.
+Log out normally, choose the managed Hyprland session in Ly, and keep managed
+Sway as recovery.
 An already running managed shell may be refreshed during apply; that is no
-fresh-login evidence. Keep Sway recovery. A missing login, duplicate shell or
+fresh-login evidence. A missing login, duplicate shell or
 lost recovery is a failed physical observation, not a reason to rerun bootstrap
 or assemble guessed playbooks. The
 [release runbook](https://github.com/importriri/hyperlab-ansible/blob/main/docs/release-evidence.md)

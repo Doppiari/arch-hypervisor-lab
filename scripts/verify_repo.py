@@ -178,13 +178,30 @@ for relative, required_sources in (
     targets = set(link_re.findall((root / relative).read_text(encoding="utf-8")))
     if not required_sources <= targets:
         fail(f"{relative}: missing current host/status evidence links")
-for stale in (
-    "host remains headless by default",
-    "Add the optional cockpit",
-    "from `pending` to `verified`",
-):
-    if stale in readme or stale in setup:
-        fail(f"stale pipeline topology claim: {stale}")
+# Status records cannot make contradictory newcomer prose safe. Reject the
+# retired claims across every guide page, including wrapped/emphasized text.
+for relative in ("README.md", "SETUP.md", "FAQ.md", "TROUBLESHOOTING.md"):
+    text = (root / relative).read_text(encoding="utf-8")
+    prose = re.sub(r"\s+", " ", text.replace("*", "").replace("`", "")).casefold()
+    for stale in (
+        "host remains headless by default",
+        "Add the optional cockpit",
+        "from `pending` to `verified`",
+        "no profile, build, image",
+        "not built or available",
+        "Proposed and unimplemented",
+        "lease is still Proposed",
+        "integrated host entrypoint",
+        "Do not guess a playbook name",
+        "does **not** assemble",
+        "The controls are built",
+        "signed and publicly downloadable",
+        "eligible for signing",
+        "signing-eligible",
+    ):
+        claim = stale.replace("*", "").replace("`", "").casefold()
+        if re.search(rf"\b{re.escape(claim)}\b", prose):
+            fail(f"{relative}: stale pipeline topology claim: {stale}")
 for heading in (
     "## 4. Prepare and seal images",
     "## 5. Exercise explicit VM lifecycle",
