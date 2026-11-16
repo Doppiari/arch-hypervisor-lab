@@ -15,9 +15,9 @@ accelerated desktop or physical single-GPU compatibility. See the
 
 ## Where is the installer ISO?
 
-The [Proposed design](https://github.com/importriri/arch-bootstrap/blob/main/docs/adr/0001-iso-build-and-distribution.md)
+The [Proposed design](https://github.com/Doppiari/arch-bootstrap/blob/main/docs/adr/0001-iso-build-and-distribution.md)
 has a development profile and
-[two recorded builds](https://github.com/importriri/arch-bootstrap/blob/main/iso/README.md).
+[two recorded builds](https://github.com/Doppiari/arch-bootstrap/blob/main/iso/README.md).
 Their package manifests match, their image bytes differ, and the cache/timestamp
 mismatch is diagnosed in that evidence. The images remain development-only,
 unsigned and ineligible for signing, with no admitted payload or public download.
@@ -29,7 +29,7 @@ automation pair is frozen by this guide.
 ## Which host target should I use?
 
 After the root-to-administrator transition, use the existing
-[`playbooks/v1-host.yml`](https://github.com/importriri/hyperlab-ansible/blob/main/playbooks/v1-host.yml)
+[`playbooks/v1-host.yml`](https://github.com/Doppiari/hyperlab-ansible/blob/main/playbooks/v1-host.yml)
 for check/diff and both applies, with `-K` and the same local identity overrides
 as [step 2c](SETUP.md#2c-reconcile-the-existing-laptop-target-stop-before-claiming-v1).
 It includes `lab.yml` (foundation, Sway, Looking Glass), managed
@@ -39,7 +39,7 @@ recovery and VFIO inhibitor observations remain separate physical gates.
 
 ## Does a prepared campaign mean v1 is qualified?
 
-No. The [v3 campaign and runbook](https://github.com/importriri/hyperlab-ansible/blob/main/docs/release-evidence.md)
+No. The [v3 campaign and runbook](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/release-evidence.md)
 prepare the selected v1 gates; qualification is pending. V2 is historical and
 cannot qualify v1, and prior passes cannot be imported. Software fixtures are
 not laptop observations. Both compatibility profiles remain `pipeline-pending`.
@@ -81,7 +81,7 @@ Services can use it only through reviewed policy and a matching Template/spec.
 The clean → dev → dirty → lab ladder only lowers within a host boot. Returning
 to a cleaner use needs a host reboot; a GPU reset is no sanitization proof.
 The optional per-run lease design is
-[Accepted in ADR 0019](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md),
+[Accepted in ADR 0019](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md),
 but its controls are not built. The initial scope is `workstation-dev-standard`
 only, default without the dedicated NVIDIA GPU. Its draft Template first needs
 a sealed image/session working in both shapes, Create acceptance on Nitro, and
@@ -110,7 +110,7 @@ input isolation, process confinement and other physical/security gates remain
 open. Separate signed loader/kernel assets leave initramfs and command line
 outside that authentication. A convincing guest window, green CI or one
 successful component is no full-pipeline/security guarantee. Read the
-[stage-2 threat model](https://github.com/importriri/hyperlab-ansible/blob/main/docs/threat-model.md)
+[stage-2 threat model](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/threat-model.md)
 and this repository's [evidence threat model](EVIDENCE-THREAT-MODEL.md).
 Use [SECURITY.md](SECURITY.md) for vulnerabilities or published private data;
 a policy file does not activate a private-reporting service. Rights/provenance

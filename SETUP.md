@@ -8,9 +8,9 @@ no qualified complete v1 installation path today**.
 
 The intended primary distribution is a project installer ISO; its release is
 still pending.
-The [ISO proposal](https://github.com/importriri/arch-bootstrap/blob/main/docs/adr/0001-iso-build-and-distribution.md)
+The [ISO proposal](https://github.com/Doppiari/arch-bootstrap/blob/main/docs/adr/0001-iso-build-and-distribution.md)
 remains Proposed, with a development profile and
-[recorded development result](https://github.com/importriri/arch-bootstrap/blob/main/iso/README.md):
+[recorded development result](https://github.com/Doppiari/arch-bootstrap/blob/main/iso/README.md):
 two builds have matching package manifests but unequal image bytes. The cache
 and timestamp mismatch is diagnosed there; both images remain development-only,
 unsigned and ineligible for signing. No payload is admitted for redistribution
@@ -27,16 +27,16 @@ transient development artefact names or selecting a release pair here.
 
 | Item | Current state | Evidence |
 | --- | --- | --- |
-| v1 host composition | `lab.yml`; `host-desktop-hyprland.yml`; `host-sleep-guard.yml` | [v1 host target](https://github.com/importriri/hyperlab-ansible/blob/main/playbooks/v1-host.yml) |
-| Desktop staging | `no Ly default`; `no compositor start`; `no login proof` | [v1 host target](https://github.com/importriri/hyperlab-ansible/blob/main/playbooks/v1-host.yml) |
-| Installer ISO | `development-only`; `unsigned`; `signing-ineligible` | [Development result](https://github.com/importriri/arch-bootstrap/blob/main/iso/README.md) |
-| ISO comparison | `two builds`; `matching manifests`; `unequal image bytes`; `mismatch diagnosed` | [Development comparison](https://github.com/importriri/arch-bootstrap/blob/main/iso/README.md) |
-| ISO distribution | `no admitted payload`; `no public download` | [Distribution stops](https://github.com/importriri/arch-bootstrap/blob/main/iso/README.md) |
-| GPU lease design | `accepted`; `workstation-dev-standard only`; `default without dedicated GPU` | [ADR 0019](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md) |
-| GPU lease controls | `not built` | [ADR 0019](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md) |
-| Lease prerequisites | `image pending`; `Create pending`; `physical transition pending` | [ADR 0019](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md) |
-| v1 acceptance | `v3 prepared`; `qualification pending` | [Release evidence](https://github.com/importriri/hyperlab-ansible/blob/main/docs/release-evidence.md) |
-| v2 acceptance | `historical` | [Release evidence](https://github.com/importriri/hyperlab-ansible/blob/main/docs/release-evidence.md) |
+| v1 host composition | `lab.yml`; `host-desktop-hyprland.yml`; `host-sleep-guard.yml` | [v1 host target](https://github.com/Doppiari/hyperlab-ansible/blob/main/playbooks/v1-host.yml) |
+| Desktop staging | `no Ly default`; `no compositor start`; `no login proof` | [v1 host target](https://github.com/Doppiari/hyperlab-ansible/blob/main/playbooks/v1-host.yml) |
+| Installer ISO | `development-only`; `unsigned`; `signing-ineligible` | [Development result](https://github.com/Doppiari/arch-bootstrap/blob/main/iso/README.md) |
+| ISO comparison | `two builds`; `matching manifests`; `unequal image bytes`; `mismatch diagnosed` | [Development comparison](https://github.com/Doppiari/arch-bootstrap/blob/main/iso/README.md) |
+| ISO distribution | `no admitted payload`; `no public download` | [Distribution stops](https://github.com/Doppiari/arch-bootstrap/blob/main/iso/README.md) |
+| GPU lease design | `accepted`; `workstation-dev-standard only`; `default without dedicated GPU` | [ADR 0019](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md) |
+| GPU lease controls | `not built` | [ADR 0019](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md) |
+| Lease prerequisites | `image pending`; `Create pending`; `physical transition pending` | [ADR 0019](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md) |
+| v1 acceptance | `v3 prepared`; `qualification pending` | [Release evidence](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/release-evidence.md) |
+| v2 acceptance | `historical` | [Release evidence](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/release-evidence.md) |
 | Nitro full pipeline | `pipeline-pending` | [Compatibility matrix](hardware/compatibility.yml) |
 | Predator full pipeline | `pipeline-pending` | [Compatibility matrix](hardware/compatibility.yml) |
 
@@ -108,8 +108,8 @@ no-passthrough profile caps automatic guests at 2048 MiB. Live budgets also
 include running guests and inactive registered services. Keep room for bases,
 independent permanent copies, temporary capture copies, exports and backups;
 there is no universal minimum whole-disk capacity in the contract. See
-[profiles](https://github.com/importriri/hyperlab-ansible/blob/main/group_vars/all/hardware.yml)
-and [first-Machine resources](https://github.com/importriri/hyperlab-ansible/blob/main/docs/first-machine.md).
+[profiles](https://github.com/Doppiari/hyperlab-ansible/blob/main/group_vars/all/hardware.yml)
+and [first-Machine resources](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/first-machine.md).
 
 Choose these before starting; do not edit tracked defaults:
 
@@ -136,7 +136,7 @@ Choose these before starting; do not edit tracked defaults:
   Enrollment and firmware enablement are manual, with recoverable vendor trust
   reviewed first. Secure Boot here does not authenticate the separate initramfs
   or command line; module trust/lockdown is a separate open gate. Read the
-  [Secure Boot procedure](https://github.com/importriri/hyperlab-ansible/blob/main/docs/nitro-secure-boot-acceptance.md).
+  [Secure Boot procedure](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/nitro-secure-boot-acceptance.md).
 
 ### Time to set aside
 
@@ -213,7 +213,7 @@ Install missing verification tools on the live medium only:
 ```bash
 pacman -Sy --needed git shellcheck bats python-yaml
 cd /root
-git clone https://github.com/importriri/arch-bootstrap.git
+git clone https://github.com/Doppiari/arch-bootstrap.git
 cd /root/arch-bootstrap
 git rev-parse HEAD
 git status --short
@@ -233,7 +233,7 @@ Package names checked against the official Arch package database on 2026-10-28:
 [bats](https://archlinux.org/packages/extra/any/bats/),
 [python-yaml](https://archlinux.org/packages/extra/x86_64/python-yaml/).
 The bootstrap also requires the live tools its
-[engine](https://github.com/importriri/arch-bootstrap/blob/main/installer)
+[engine](https://github.com/Doppiari/arch-bootstrap/blob/main/installer)
 uses: `sgdisk`, `cryptsetup` with argon2id, Btrfs/FAT tools, `pacstrap`,
 `genfstab`, `arch-chroot`, `bootctl`, mount and device-discovery tools.
 A missing tool is a stop, not a reason to run a partial installer.
@@ -314,7 +314,7 @@ device discovery, `ping`); live-medium Wi-Fi state is not a configured host
 account. Installed iwd handles Wi-Fi DHCP, networkd handles `en*` wired DHCP,
 and resolved supplies DNS. An unusual wired name needs review, not a guessed
 interface. Follow the
-[Secure Boot enrollment and recovery review](https://github.com/importriri/hyperlab-ansible/blob/main/docs/nitro-secure-boot-acceptance.md)
+[Secure Boot enrollment and recovery review](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/nitro-secure-boot-acceptance.md)
 before changing firmware keys. Do not blindly clear vendor keys or bypass the
 Option ROM guard. The bootstrap's printed enrollment reminder is not the full
 hardware-specific enrollment procedure. Missing recovery material is a stop.
@@ -350,7 +350,7 @@ there is no ordinary account to run it yet. Obtain stage 2 and verification tool
 ```bash
 pacman -Syu --needed ansible-lint ruff shellcheck bats python-yaml
 cd /root
-git clone https://github.com/importriri/hyperlab-ansible.git
+git clone https://github.com/Doppiari/hyperlab-ansible.git
 cd /root/hyperlab-ansible
 git rev-parse HEAD
 git status --short
@@ -385,14 +385,14 @@ host_profile: auto
 ```
 
 Keep `guest_cloud_init_user` equal to `admin_user` for the later workstation
-procedures: [guest defaults](https://github.com/importriri/hyperlab-ansible/blob/main/group_vars/all/guest.yml)
+procedures: [guest defaults](https://github.com/Doppiari/hyperlab-ansible/blob/main/group_vars/all/guest.yml)
 set it independently, and overriding `admin_user` alone does not change it.
 Use an ordinary lowercase account name with the default `/home/NAME` home,
 never `root`. For a deliberate no-passthrough foundation set
 `host_profile: no-gpu-passthrough` here instead; `auto` never falls back to it.
 The desktop keyboard is not a local choice today. The recorded hardware
 profile wins over the
-[desktop input defaults](https://github.com/importriri/hyperlab-ansible/blob/main/roles/host_desktop_sway/defaults/main.yml),
+[desktop input defaults](https://github.com/Doppiari/hyperlab-ansible/blob/main/roles/host_desktop_sway/defaults/main.yml),
 both laptop profiles set `it`, the Sway session loads the layouts `it`, `us`,
 `ara` in that order, and the Hyprland role refuses any other baseline. Do not
 put `host_desktop_sway_input_defaults` or `host_profiles` in this file: the
@@ -503,7 +503,7 @@ Expect no failed/unreachable tasks and final `changed=0`. Stop on failures,
 unreviewed boot changes or nonzero repeat changes. Review the managed VFIO boot
 entry and its recovery entry before the next reboot.
 
-The existing [v1 host target](https://github.com/importriri/hyperlab-ansible/blob/main/playbooks/v1-host.yml)
+The existing [v1 host target](https://github.com/Doppiari/hyperlab-ansible/blob/main/playbooks/v1-host.yml)
 composes `lab.yml`, `host-desktop-hyprland.yml` with its managed-session lifecycle
 enabled, and `host-sleep-guard.yml`. The `lab.yml` component supplies
 `foundation.yml`, then `host_desktop_common`, `host_desktop_sway` and
@@ -522,7 +522,7 @@ managed Hyprland login with one shell, logout and managed Sway recovery, then
 the sleep inhibitor while a real VFIO guest runs and its removal after shutdown.
 Keep these physical observations separate from installed-session/Create
 acceptance and from source checks. The
-[roadmap](https://github.com/importriri/hyperlab-ansible/blob/main/docs/roadmap.md#v1-scope-and-evidence-status)
+[roadmap](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/roadmap.md#v1-scope-and-evidence-status)
 records provisioning, disposable, lease and qualification gaps separately.
 The later sections explain those conditional boundaries, not a bypass of this
 stop.
@@ -546,7 +546,7 @@ virsh -c qemu:///system net-list --all
 
 Expect five persistent product networks. Their existence alone does not prove
 isolation. Guest-to-host default deny and cross-domain blocking need the
-[reviewed probes and control fixtures](https://github.com/importriri/hyperlab-ansible/blob/main/docs/network-flows.md).
+[reviewed probes and control fixtures](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/network-flows.md).
 `lab` must remain offline; a DNS timeout with a broken control is no isolation
 proof. Stop before untrusted workloads if isolation is unobserved or differs.
 Only explicitly reviewed service exposures may open a flow.
@@ -581,12 +581,12 @@ Run sequentially. Expect the pinned digest, valid provenance receipt and sealed
 base validation, including the claimed guest-agent content. A missing URL,
 changed digest, unavailable inspection tool, failed receipt or absent base is a
 stop. Never substitute a new download or checksum just to pass. See the
-[image playbook map](https://github.com/importriri/hyperlab-ansible/blob/main/docs/playbooks.md#image-provenance).
+[image playbook map](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/playbooks.md#image-provenance).
 
 `arch-dev-20261003` is a **local workstation capture**, not a public qcow2
 URL. On a new host, `workstation-dev` cannot create a usable Machine until the
 correct reviewed image is locally available and sealed. The
-[Workbench procedure](https://github.com/importriri/hyperlab-ansible/blob/main/docs/golden-image-workbench.md)
+[Workbench procedure](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/golden-image-workbench.md)
 requires an explicitly adopted non-product candidate, prepared session,
 shut-off disk, flat copy, offline generalization, leftover scan, package/build
 provenance, import and validation. Do not capture a product Machine or promote
@@ -600,8 +600,8 @@ readback proof remains open. Both require local image preparation and validation
 See [missing agent](TROUBLESHOOTING.md#missing-agent-or-server-template).
 
 Optional Windows and manual-install distributions use the
-[Windows workshop](https://github.com/importriri/hyperlab-ansible/blob/main/docs/windows-image-workshop.md)
-and [Linux ISO workshop](https://github.com/importriri/hyperlab-ansible/blob/main/docs/linux-iso-workshop.md).
+[Windows workshop](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/windows-image-workshop.md)
+and [Linux ISO workshop](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/linux-iso-workshop.md).
 They require legitimately obtained private media, guest-side installation and
 reviewed generalization/sealing; keep media, accounts, keys and receipts local.
 They are not prerequisites for the first server or the host target.
@@ -655,7 +655,7 @@ Expect your account and `600 regular empty file`. Leave it empty: do not fill
 it with `ssh-keyscan` or by accepting an SSH prompt. Guest host keys enter it
 only through the inventory step, which reads them with the QEMU Guest Agent.
 
-Follow the [first-Machine procedure](https://github.com/importriri/hyperlab-ansible/blob/main/docs/first-machine.md)
+Follow the [first-Machine procedure](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/first-machine.md)
 only when its prerequisites are met. `hyperlabctl machine templates` and
 `hyperlabctl machine create-plan` inspect current choices; failure/absence of
 the CLI or an unready/local-image-missing Template stops creation. `machine
@@ -682,7 +682,7 @@ without a password still retain passwordless sudo; that limitation remains.
 If the inventory disappears after a new session/reboot, use only the
 authoritative inventory step to regenerate genuinely missing state; redirected,
 unsafe or unreadable files must be refused. The
-[integration gate](https://github.com/importriri/hyperlab-ansible/blob/main/problems/runtime-inventory-self-heal.md)
+[integration gate](https://github.com/Doppiari/hyperlab-ansible/blob/main/problems/runtime-inventory-self-heal.md)
 is open: an on-demand action is not guaranteed to repair it. CLI/desktop
 self-heal and shell provisioning do not automatically load this guide’s local
 override file; use the explicit playbook with the overrides for this manual
@@ -695,7 +695,7 @@ start are software-verified. A fresh restricted seed and physical discard/access
 observations on the frozen commits remain prerequisites; a host apply does not
 upgrade existing seeds. Do not use a disposable Machine as a qualified safe
 access/recovery path today or claim that repeating inventory closes this gate.
-See the [current scope](https://github.com/importriri/hyperlab-ansible/blob/main/docs/roadmap.md#v1-scope-and-evidence-status).
+See the [current scope](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/roadmap.md#v1-scope-and-evidence-status).
 
 ## 6. Use the dGPU through VFIO
 
@@ -712,7 +712,7 @@ reviewed handoff profile and matching spec/Template. Within a boot GPU uses go
 clean → dev → dirty → lab, never back up; a higher-trust use after a lower one
 requires a host reboot. A reset does not prove erasure of GPU state. Never delete
 or reset the live trust record. The optional per-run GPU lease design is
-Accepted in [ADR 0019](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md),
+Accepted in [ADR 0019](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md),
 initially for `workstation-dev-standard` only, defaulting to no dedicated NVIDIA
 GPU. The controls are **not built**: existing VFIO Machines still start with
 the GPU every time. The draft Template needs a sealed image with a working
@@ -721,7 +721,7 @@ GPU → no-GPU → GPU transition in one host boot must prove Looking Glass on G
 runs, SPICE without GPU and the ladder after each run. These prerequisites and
 separate lease implementation remain open. No lease command is available, and
 design acceptance makes no arbitrary Template usable in both shapes. See
-[GPU policy](https://github.com/importriri/hyperlab-ansible/blob/main/docs/gpu-handoff-policy.md).
+[GPU policy](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/gpu-handoff-policy.md).
 Keep the managed PCIe power-management workaround; do not reproduce the known
 [freeze](problems/gpu-freeze-power-management.md).
 
@@ -744,7 +744,7 @@ closes only that console, starts the session-bound sender and opens Looking
 Glass. `hyperlabctl open console NAME` remains explicit recovery. The built-in
 Looking Glass SPICE fallback is rejected as PRIMARY authentication; do not
 repeat password entry into its unreliable input path. The
-[handoff note](https://github.com/importriri/hyperlab-ansible/blob/main/problems/looking-glass-linux-prelogin-primary-handoff.md)
+[handoff note](https://github.com/Doppiari/hyperlab-ansible/blob/main/problems/looking-glass-linux-prelogin-primary-handoff.md)
 records a later Nitro automatic-transition observation as component history;
 final candidate acceptance remains separate.
 
@@ -772,7 +772,7 @@ locally sealed agent-capable base, capacity and strict runtime SSH inventory.
 The reference Jellyfin specs depend on the unbuilt `debian-server`, so this is
 currently a **stop**, not a runnable newcomer requirement.
 
-The [service procedure](https://github.com/importriri/hyperlab-ansible/blob/main/docs/service-vm-contract.md)
+The [service procedure](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/service-vm-contract.md)
 orders `service-register.yml` (check then apply) → `service-validate.yml` →
 `vm-create.yml` → inventory/key proof → guest application configuration with
 `jellyfin.yml`. Pass the spec each step expects and the same local overrides;
@@ -792,7 +792,7 @@ Acquire this repository explicitly if not already present:
 
 ```bash
 cd "$HOME"
-git clone https://github.com/importriri/arch-hypervisor-lab.git
+git clone https://github.com/Doppiari/arch-hypervisor-lab.git
 cd "$HOME/arch-hypervisor-lab"
 git rev-parse HEAD
 git status --short
@@ -817,8 +817,8 @@ it is not a third hardware input. Nitro requires clean installation, two boots,
 correct storage, full intended host check/apply/apply (`changed=0`), isolation,
 server/Machine lifecycle, real video/input/audio, reboot/cold-start/recovery and
 reviewed evidence. The separate `release/acceptance.v3.yml` and its CLI/fixtures
-prepare a pending v1 campaign; [ADR 0063](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0063-v1-acceptance-campaign.md)
-remains Proposed. Follow the [release evidence runbook](https://github.com/importriri/hyperlab-ansible/blob/main/docs/release-evidence.md)
+prepare a pending v1 campaign; [ADR 0063](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/adr/0063-v1-acceptance-campaign.md)
+remains Proposed. Follow the [release evidence runbook](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/release-evidence.md)
 for the selected scope and order. V2 is historical and cannot qualify v1;
 neither its passes nor earlier observations can be imported as v3 passes.
 Full install acceptance, software remedies, complete provenance/rights review

@@ -23,7 +23,7 @@ assume `wlan0`, skip the connectivity guard or disable TLS/package verification.
 
 **Source:** [official installation networking](https://wiki.archlinux.org/title/Installation_guide#Connect_to_the_internet)
 and [iwctl manual](https://man.archlinux.org/man/iwctl.1.en); the repository's
-network guard is in the [bootstrap engine](https://github.com/importriri/arch-bootstrap/blob/main/installer).
+network guard is in the [bootstrap engine](https://github.com/Doppiari/arch-bootstrap/blob/main/installer).
 There is no local problem note about initial live Wi-Fi; these are the upstream
 instructions rather than an invented historical fix.
 
@@ -47,7 +47,7 @@ someone else's state. Do not paste suggested unmount/close commands until their
 ownership and recovery impact are reviewed. A dry run should unmount/close
 nothing. Any cleanup failure is visible and needs review before rerunning.
 
-**Source and status:** [dry-run prompts, GPT limit and cleanup history](https://github.com/importriri/arch-bootstrap/blob/main/problems/dry-run-asks-for-luks-passphrase.md).
+**Source and status:** [dry-run prompts, GPT limit and cleanup history](https://github.com/Doppiari/arch-bootstrap/blob/main/problems/dry-run-asks-for-luks-passphrase.md).
 Prompt documentation and owned cleanup were corrected; the existing-GPT
 rehearsal limitation remains.
 
@@ -89,7 +89,7 @@ known-good boot entry and recovery medium; repair requires a reviewed plan.
 
 **Sources and status:** [boot dialect fix](problems/boot-entries-legacy-encrypt-syntax.md),
 [loader continuation fix](problems/boot-entries-backslash-continuation.md),
-[storage writer failure semantics](https://github.com/importriri/arch-bootstrap/blob/main/docs/release-gates.md#a-failed-storage-hand-off).
+[storage writer failure semantics](https://github.com/Doppiari/arch-bootstrap/blob/main/docs/release-gates.md#a-failed-storage-hand-off).
 Dialect/config defects were corrected; your actual boot and mounted handoff
 still require observation.
 
@@ -99,7 +99,7 @@ error and `findmnt -rno TARGET` from the live host. While a chroot is active,
 expect its resolver file to appear as a mount target; after exit its temporary
 bind mounts should be gone. Stop rather than deleting the busy resolver file. Current bootstrap
 creates the resolver symlink outside the last chroot. The
-[resolver problem note](https://github.com/importriri/arch-bootstrap/blob/main/problems/arch-chroot-bind-mounted-resolv-conf.md)
+[resolver problem note](https://github.com/Doppiari/arch-bootstrap/blob/main/problems/arch-chroot-bind-mounted-resolv-conf.md)
 records the historical fix; do not replay its failed `rm` experiment.
 
 ## Unknown hardware profile
@@ -116,8 +116,8 @@ Stop for profile/IOMMU review. A deliberate foundation-only host may select
 fallback and cannot run VFIO Machines. Never force Nitro IDs onto unknown
 hardware. This is a refusal contract, not a broken detector to bypass.
 
-**Sources:** [hardware profile procedure](https://github.com/importriri/hyperlab-ansible/blob/main/docs/hardware-profiles.md),
-[no-passthrough decision](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0052-host-without-gpu-passthrough.md).
+**Sources:** [hardware profile procedure](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/hardware-profiles.md),
+[no-passthrough decision](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/adr/0052-host-without-gpu-passthrough.md).
 
 ## Host apply finishes but no Hyprland session starts
 
@@ -128,7 +128,7 @@ Compare the saved check/diff and both apply commands: all three must name
 `playbooks/v1-host.yml`, with `-K` and the same private local identity file.
 `lab.yml` alone covers foundation/Sway/Looking Glass, not the v1 composition.
 
-The [v1 host target](https://github.com/importriri/hyperlab-ansible/blob/main/playbooks/v1-host.yml)
+The [v1 host target](https://github.com/Doppiari/hyperlab-ansible/blob/main/playbooks/v1-host.yml)
 also stages managed Hyprland/Quickshell sessions and the VFIO sleep guard.
 Staging selects no Ly default, starts no compositor and proves no login.
 Log out normally, choose the managed Hyprland session in Ly, and keep managed
@@ -137,7 +137,7 @@ An already running managed shell may be refreshed during apply; that is no
 fresh-login evidence. A missing login, duplicate shell or
 lost recovery is a failed physical observation, not a reason to rerun bootstrap
 or assemble guessed playbooks. The
-[release runbook](https://github.com/importriri/hyperlab-ansible/blob/main/docs/release-evidence.md)
+[release runbook](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/release-evidence.md)
 keeps host idempotence, session recovery and real VFIO inhibitor observations
 separate. Its v3 campaign is prepared with qualification pending; historical v2
 does not qualify v1.
@@ -155,7 +155,7 @@ should return agent capabilities. No response is not SSH closure evidence.
 Expect `server-debian` to remain draft while `debian-server` is not built.
 The sealed upstream Debian base lacks the agent; a DHCP lease proves no agent
 or trusted SSH identity. Stop before creation/provisioning. Follow the
-[offline Workbench derivation](https://github.com/importriri/hyperlab-ansible/blob/main/docs/golden-image-workbench.md#deriving-offline-debian-server)
+[offline Workbench derivation](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/golden-image-workbench.md#deriving-offline-debian-server)
 only with its sealed local base and full provenance/sealing prerequisites.
 Do not weaken SSH checking, manually accept a network key, enable unrestricted
 guest execution or install into an untrusted guest via an unpinned connection.
@@ -167,9 +167,9 @@ agent host-key readability still needs its physical observation. A base whose
 receipt predates corrected policy needs the exact rereceipt procedure, not a
 hand-edited receipt.
 
-**Sources and status:** [Debian agent claim corrected in source](https://github.com/importriri/hyperlab-ansible/blob/main/problems/sealed-image-claimed-guest-agent.md),
-[Fedora key-read investigation, open](https://github.com/importriri/hyperlab-ansible/blob/main/problems/fedora-host-key-through-agent.md),
-[first host-key pin fix](https://github.com/importriri/hyperlab-ansible/blob/main/problems/guest-host-key-unknown-after-first-boot.md).
+**Sources and status:** [Debian agent claim corrected in source](https://github.com/Doppiari/hyperlab-ansible/blob/main/problems/sealed-image-claimed-guest-agent.md),
+[Fedora key-read investigation, open](https://github.com/Doppiari/hyperlab-ansible/blob/main/problems/fedora-host-key-through-agent.md),
+[first host-key pin fix](https://github.com/Doppiari/hyperlab-ansible/blob/main/problems/guest-host-key-unknown-after-first-boot.md).
 The Debian replacement image and the two-server SSH campaign remain pending.
 
 ## Missing runtime inventory
@@ -198,7 +198,7 @@ refusal requiring investigation, not permission to delete it. Do not copy a
 stale IP or disable strict host-key checking. Automatic repair is not accepted
 merely because code exists.
 
-**Source and status:** [runtime inventory self-heal](https://github.com/importriri/hyperlab-ansible/blob/main/problems/runtime-inventory-self-heal.md),
+**Source and status:** [runtime inventory self-heal](https://github.com/Doppiari/hyperlab-ansible/blob/main/problems/runtime-inventory-self-heal.md),
 open integration/hardware gate.
 
 ## kvmfr permission denied
@@ -257,7 +257,7 @@ and prerequisites are confirmed. PRIMARY itself owns its temporary console;
 do not kill unrelated viewer/sender processes. Video, pre-login handoff,
 shortcut isolation, logout cleanup and physical audio have separate gates.
 
-**Source and status:** [Linux pre-login PRIMARY handoff](https://github.com/importriri/hyperlab-ansible/blob/main/problems/looking-glass-linux-prelogin-primary-handoff.md).
+**Source and status:** [Linux pre-login PRIMARY handoff](https://github.com/Doppiari/hyperlab-ansible/blob/main/problems/looking-glass-linux-prelogin-primary-handoff.md).
 The note records a successful later Nitro automatic handoff; it does not close
 the remaining input-security/candidate qualification gates.
 

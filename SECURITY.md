@@ -5,9 +5,9 @@
 Report a security problem in `arch-hypervisor-lab` privately, through
 GitHub's private vulnerability reporting for this repository: the
 **Report a vulnerability** button on
-<https://github.com/importriri/arch-hypervisor-lab/security/advisories>,
+<https://github.com/Doppiari/arch-hypervisor-lab/security/advisories>,
 which opens the form at
-<https://github.com/importriri/arch-hypervisor-lab/security/advisories/new>.
+<https://github.com/Doppiari/arch-hypervisor-lab/security/advisories/new>.
 A report goes to the repository's maintainer, named in
 [`AUTHORS.md`](AUTHORS.md). Do not open a public issue, pull request or
 discussion about it.
@@ -17,9 +17,9 @@ and sanitized hardware evidence. The code that installs and configures the
 lab lives in two other repositories, each with its own policy:
 
 - the encrypted base installer:
-  [`arch-bootstrap` security policy](https://github.com/importriri/arch-bootstrap/blob/main/SECURITY.md);
+  [`arch-bootstrap` security policy](https://github.com/Doppiari/arch-bootstrap/blob/main/SECURITY.md);
 - the host, networks, VFIO, Machines and services:
-  [`hyperlab-ansible` security policy](https://github.com/importriri/hyperlab-ansible/blob/main/SECURITY.md).
+  [`hyperlab-ansible` security policy](https://github.com/Doppiari/hyperlab-ansible/blob/main/SECURITY.md).
 
 Report a flaw to the repository whose code has it. Report it here when
 something in this repository is the problem: a guide or example here that
@@ -107,7 +107,7 @@ makes things worse.
 What this repository's evidence can and cannot show, and what it trusts,
 is in [`EVIDENCE-THREAT-MODEL.md`](EVIDENCE-THREAT-MODEL.md). The
 protections of the lab itself are in the
-[stage-2 threat model](https://github.com/importriri/hyperlab-ansible/blob/main/docs/threat-model.md).
+[stage-2 threat model](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/threat-model.md).
 
 ## Supported versions
 

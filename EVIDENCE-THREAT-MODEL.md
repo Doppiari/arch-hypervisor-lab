@@ -6,9 +6,9 @@ documents, the two scripts, the CI workflow and what is published here.
 
 The lab itself has its own threat models, which this page does not
 restate or extend: the
-[stage-2 threat model](https://github.com/importriri/hyperlab-ansible/blob/main/docs/threat-model.md)
+[stage-2 threat model](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/threat-model.md)
 for the host, networks, VFIO and Machines, and the
-[bootstrap threat model](https://github.com/importriri/arch-bootstrap/blob/main/docs/threat-model.md)
+[bootstrap threat model](https://github.com/Doppiari/arch-bootstrap/blob/main/docs/threat-model.md)
 for the encrypted base. The lab is a compartmentalization on KVM. It is not
 Qubes OS and does not provide Qubes OS security properties, and nothing
 published here can show that it does.
@@ -186,7 +186,7 @@ It is a consistency check, not a privacy or authenticity certificate.
 ## Current stage-2 boundaries
 
 Evidence here describes the lab at the boundaries the
-[stage-2 roadmap](https://github.com/importriri/hyperlab-ansible/blob/main/docs/roadmap.md)
+[stage-2 roadmap](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/roadmap.md)
 states today. Where an older guide in this repository says otherwise, the
 roadmap is current:
 

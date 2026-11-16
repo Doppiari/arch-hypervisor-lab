@@ -27,8 +27,8 @@ a normal issue, with sanitized output only.
 | `PROVENANCE-AUDIT.md`, `file-inventory.tsv` | File origins and unresolved rights questions, at one input commit |
 
 The installer and the automation are in
-[`arch-bootstrap`](https://github.com/importriri/arch-bootstrap) and
-[`hyperlab-ansible`](https://github.com/importriri/hyperlab-ansible);
+[`arch-bootstrap`](https://github.com/Doppiari/arch-bootstrap) and
+[`hyperlab-ansible`](https://github.com/Doppiari/hyperlab-ansible);
 changes to their behaviour belong there.
 
 ## Set up
@@ -162,5 +162,5 @@ Do not describe them as available:
 - later hardening (enforced QEMU confinement, driver Machines for the
   network card and USB controller, measured boot) is built only in part,
   switched off or proposed, as the
-  [stage-2 roadmap](https://github.com/importriri/hyperlab-ansible/blob/main/docs/roadmap.md)
+  [stage-2 roadmap](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/roadmap.md)
   records.

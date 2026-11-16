@@ -17,7 +17,7 @@ account and the existing host target. Use [Troubleshooting](TROUBLESHOOTING.md)
 for symptoms and [FAQ](FAQ.md) for hardware, media, erasure and security limits.
 The complete v1 installation remains blocked on software and hardware gates;
 the guide marks the stops. The project ISO has a
-[development-only result](https://github.com/importriri/arch-bootstrap/blob/main/iso/README.md):
+[development-only result](https://github.com/Doppiari/arch-bootstrap/blob/main/iso/README.md):
 two builds, matching package manifests but unequal image bytes with a diagnosed
 mismatch. It remains unsigned and signing-ineligible, with no admitted payload
 or public download. The authenticated upstream medium remains the usable route.
@@ -36,7 +36,7 @@ Arch Linux host
 NVIDIA dGPU -- VFIO --> one workload VM at a time
 ```
 
-The existing [v1 host target](https://github.com/importriri/hyperlab-ansible/blob/main/playbooks/v1-host.yml)
+The existing [v1 host target](https://github.com/Doppiari/hyperlab-ansible/blob/main/playbooks/v1-host.yml)
 composes `lab.yml` (foundation, Sway and Looking Glass), managed Hyprland/Quickshell
 session staging and the VFIO sleep guard. The iGPU keeps the host usable while
 the dGPU belongs to one running VFIO workload. Hyprland is preferred and Sway
@@ -46,7 +46,7 @@ Services may use the
 GPU through an explicitly reviewed handoff profile and matching Template/spec.
 The clean → dev → dirty → lab GPU ladder only lowers within a host boot;
 returning to a cleaner use requires a host reboot. The optional per-run GPU
-lease has an [Accepted design](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md)
+lease has an [Accepted design](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md)
 but is not built: initially `workstation-dev-standard` only, default without the
 dedicated GPU, after image readiness, Create acceptance and real transition
 prerequisites. Existing VFIO Machines still start with the GPU. See the
@@ -54,9 +54,9 @@ prerequisites. Existing VFIO Machines still start with the GPU. See the
 
 ## Repository set
 
-1. [`arch-bootstrap`](https://github.com/importriri/arch-bootstrap) installs the
+1. [`arch-bootstrap`](https://github.com/Doppiari/arch-bootstrap) installs the
    encrypted Arch base and writes the storage hand-off contract.
-2. [`hyperlab-ansible`](https://github.com/importriri/hyperlab-ansible) configures
+2. [`hyperlab-ansible`](https://github.com/Doppiari/hyperlab-ansible) configures
    KVM, VFIO, networking, isolation, Sway/Looking Glass, managed Hyprland/Quickshell
    staging and the sleep guard, then owns explicit image/VM/service transactions.
 3. This repository records what the architecture is and what has actually been
@@ -79,7 +79,7 @@ results do not qualify the complete current v1 path. An explicit
 `no-gpu-passthrough` profile supplies a foundation without VFIO, with no
 accelerated desktop or physical single-GPU compatibility claim.
 
-The [v3 acceptance campaign](https://github.com/importriri/hyperlab-ansible/blob/main/docs/release-evidence.md)
+The [v3 acceptance campaign](https://github.com/Doppiari/hyperlab-ansible/blob/main/docs/release-evidence.md)
 is prepared, with qualification pending. Its fixtures add no physical passes;
 v2 remains historical and cannot qualify v1. The new host target's convergence,
 fresh managed login, Sway recovery and VFIO inhibitor observations still need

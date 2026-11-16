@@ -112,8 +112,8 @@ if host_commands != [
 # These visible records distinguish implemented software from qualification.
 # Keep evidence attached to each state so a status cannot silently move to a
 # different source. No sibling checkout is needed to check the published guide.
-ansible_source = "https://github.com/importriri/hyperlab-ansible/blob/main/"
-bootstrap_source = "https://github.com/importriri/arch-bootstrap/blob/main/"
+ansible_source = "https://github.com/Doppiari/hyperlab-ansible/blob/main/"
+bootstrap_source = "https://github.com/Doppiari/arch-bootstrap/blob/main/"
 host_evidence = ansible_source + "playbooks/v1-host.yml"
 iso_evidence = bootstrap_source + "iso/README.md"
 lease_evidence = ansible_source + "docs/adr/0019-gpu-lease.md"
