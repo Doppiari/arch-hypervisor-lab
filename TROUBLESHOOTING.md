@@ -119,6 +119,27 @@ hardware. This is a refusal contract, not a broken detector to bypass.
 **Sources:** [hardware profile procedure](https://github.com/importriri/hyperlab-ansible/blob/main/docs/hardware-profiles.md),
 [no-passthrough decision](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0052-host-without-gpu-passthrough.md).
 
+## Host apply finishes but no Hyprland session starts
+
+**Symptom:** host convergence succeeds, but the preferred desktop has not been
+observed. **Context:** administrator after the real local login in
+[step 2b](SETUP.md#2b-set-the-account-password-transfer-ownership-log-in-anew).
+Compare the saved check/diff and both apply commands: all three must name
+`playbooks/v1-host.yml`, with `-K` and the same private local identity file.
+`lab.yml` alone covers foundation/Sway/Looking Glass, not the v1 composition.
+
+The [v1 host target](https://github.com/importriri/hyperlab-ansible/blob/main/playbooks/v1-host.yml)
+also stages managed Hyprland/Quickshell sessions and the VFIO sleep guard.
+Staging selects no Ly default, starts no compositor and proves no login.
+An already running managed shell may be refreshed during apply; that is no
+fresh-login evidence. Keep Sway recovery. A missing login, duplicate shell or
+lost recovery is a failed physical observation, not a reason to rerun bootstrap
+or assemble guessed playbooks. The
+[release runbook](https://github.com/importriri/hyperlab-ansible/blob/main/docs/release-evidence.md)
+keeps host idempotence, session recovery and real VFIO inhibitor observations
+separate. Its v3 campaign is prepared with qualification pending; historical v2
+does not qualify v1.
+
 ## Missing agent or server Template
 
 **Symptom:** Debian Template absent/draft, guest-agent wait times out, or strict

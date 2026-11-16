@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 import re
+import shlex
 import sys
 from pathlib import Path
+
 import yaml
 
 root = Path(__file__).resolve().parents[1]
@@ -81,8 +84,100 @@ if "The Nitro\nbootstrap-to-stage-2 host path has been reproduced" not in readme
     fail("README must record the verified Nitro host path without promoting it")
 if "the normal laptop target adds Sway and the Looking Glass host transport" not in readme:
     fail("README must describe Sway and Looking Glass as part of the normal laptop target")
-if "The `playbooks/lab.yml` run in step 2 already installed Sway" not in setup:
-    fail("SETUP must not present the integrated cockpit as a separate installation")
+# Read the operator sequence as argv, rather than recognizing a prose promise.
+host_sections = re.findall(r"^### 2c\..*?\n(.*?)(?=^## )", setup, re.MULTILINE | re.DOTALL)
+host_commands: list[list[str]] = []
+if len(host_sections) != 1:
+    fail("SETUP step 2c: expected one host sequence section")
+else:
+    for block in re.findall(r"^```bash\n(.*?)^```", host_sections[0], re.MULTILINE | re.DOTALL):
+        for line in block.replace("\\\n", " ").splitlines():
+            try:
+                argv = shlex.split(line)
+            except ValueError as exc:
+                fail(f"SETUP step 2c: invalid shell command: {exc}")
+                continue
+            if argv and argv[0] == "ansible-playbook":
+                host_commands.append(argv)
+host_argv = ["ansible-playbook", "-K", "playbooks/v1-host.yml"]
+identity_argv = ["-e", "@$LAB_VARS"]
+if host_commands != [
+    ["ansible-playbook", "-K", "playbooks/preflight.yml", *identity_argv],
+    [*host_argv, "--check", "--diff", *identity_argv],
+    [*host_argv, *identity_argv],
+    [*host_argv, *identity_argv],
+]:
+    fail("SETUP step 2c: preflight and v1-host check/diff/two applies must retain -K and local identity")
+
+# These visible records distinguish implemented software from qualification.
+# Keep evidence attached to each state so a status cannot silently move to a
+# different source. No sibling checkout is needed to check the published guide.
+ansible_source = "https://github.com/importriri/hyperlab-ansible/blob/main/"
+bootstrap_source = "https://github.com/importriri/arch-bootstrap/blob/main/"
+host_evidence = ansible_source + "playbooks/v1-host.yml"
+iso_evidence = bootstrap_source + "iso/README.md"
+lease_evidence = ansible_source + "docs/adr/0019-gpu-lease.md"
+campaign_evidence = ansible_source + "docs/release-evidence.md"
+boundary_contract = {
+    "v1 host composition": ({"lab.yml", "host-desktop-hyprland.yml", "host-sleep-guard.yml"}, host_evidence),
+    "Desktop staging": ({"no Ly default", "no compositor start", "no login proof"}, host_evidence),
+    "Installer ISO": ({"development-only", "unsigned", "signing-ineligible"}, iso_evidence),
+    "ISO comparison": ({"two builds", "matching manifests", "unequal image bytes", "mismatch diagnosed"}, iso_evidence),
+    "ISO distribution": ({"no admitted payload", "no public download"}, iso_evidence),
+    "GPU lease design": ({"accepted", "workstation-dev-standard only", "default without dedicated GPU"}, lease_evidence),
+    "GPU lease controls": ({"not built"}, lease_evidence),
+    "Lease prerequisites": ({"image pending", "Create pending", "physical transition pending"}, lease_evidence),
+    "v1 acceptance": ({"v3 prepared", "qualification pending"}, campaign_evidence),
+    "v2 acceptance": ({"historical"}, campaign_evidence),
+    "Nitro full pipeline": ({"pipeline-pending"}, "hardware/compatibility.yml"),
+    "Predator full pipeline": ({"pipeline-pending"}, "hardware/compatibility.yml"),
+}
+boundary_sections = re.findall(
+    r"^## Current software boundaries\n(.*?)(?=^## )", setup, re.MULTILINE | re.DOTALL
+)
+boundary_rows: dict[str, tuple[set[str], str]] = {}
+if len(boundary_sections) != 1:
+    fail("SETUP boundaries: expected one status section")
+else:
+    for line in boundary_sections[0].splitlines():
+        if not line.startswith("|"):
+            continue
+        cells = [cell.strip() for cell in line.strip("|").split("|")]
+        if cells == ["Item", "Current state", "Evidence"] or all(
+            re.fullmatch(r":?-+:?", cell) for cell in cells
+        ):
+            continue
+        if len(cells) != 3:
+            fail("SETUP boundaries: expected three table cells")
+            continue
+        item, state, evidence = cells
+        states = [part.strip().strip("`") for part in state.split(";")]
+        links = link_re.findall(evidence)
+        if item in boundary_rows or len(states) != len(set(states)) or len(links) != 1:
+            fail(f"SETUP boundaries: duplicate or ambiguous record for {item}")
+            continue
+        boundary_rows[item] = (set(states), links[0])
+if boundary_rows.keys() != boundary_contract.keys():
+    fail("SETUP boundaries: missing, duplicate or unknown status records")
+for item, expected_record in boundary_contract.items():
+    if boundary_rows.get(item) != expected_record:
+        fail(f"SETUP boundaries: {item} status/evidence mismatch")
+for label, profile in (("Nitro", "nitro-3060"), ("Predator", "predator-3070")):
+    item = f"{label} full pipeline"
+    if boundary_rows.get(item) != (
+        {compat["systems"][profile]["components"]["full_pipeline"]},
+        "hardware/compatibility.yml",
+    ):
+        fail(f"SETUP boundaries: {item} must match compatibility matrix")
+
+for relative, required_sources in (
+    ("README.md", {host_evidence, iso_evidence, lease_evidence, campaign_evidence}),
+    ("FAQ.md", {host_evidence, iso_evidence, lease_evidence, campaign_evidence}),
+    ("TROUBLESHOOTING.md", {host_evidence, campaign_evidence}),
+):
+    targets = set(link_re.findall((root / relative).read_text(encoding="utf-8")))
+    if not required_sources <= targets:
+        fail(f"{relative}: missing current host/status evidence links")
 for stale in (
     "host remains headless by default",
     "Add the optional cockpit",

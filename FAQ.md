@@ -15,13 +15,34 @@ accelerated desktop or physical single-GPU compatibility. See the
 
 ## Where is the installer ISO?
 
-There is no project ISO to download or boot. Its intended priority is recorded
-in a [Proposed design](https://github.com/importriri/arch-bootstrap/blob/main/docs/adr/0001-iso-build-and-distribution.md);
-implementation/build, admitted payload, signing/distribution and physical boot
-are pending. Today use an authenticated **upstream Arch Linux** medium, clone
+The [Proposed design](https://github.com/importriri/arch-bootstrap/blob/main/docs/adr/0001-iso-build-and-distribution.md)
+has a development profile and
+[two recorded builds](https://github.com/importriri/arch-bootstrap/blob/main/iso/README.md).
+Their package manifests match, their image bytes differ, and the cache/timestamp
+mismatch is diagnosed in that evidence. The images remain development-only,
+unsigned and ineligible for signing, with no admitted payload or public download.
+The recorded VM smoke test qualifies no physical installation. Today use an
+authenticated **upstream Arch Linux** medium, clone
 `arch-bootstrap` and run `bootstrap`, then stage 2. No monthly medium or exact
-automation pair is frozen by this guide. `lab.yml` currently supplies Sway and
-Looking Glass, not the complete preferred Hyprland/Create v1 target.
+automation pair is frozen by this guide.
+
+## Which host target should I use?
+
+After the root-to-administrator transition, use the existing
+[`playbooks/v1-host.yml`](https://github.com/importriri/hyperlab-ansible/blob/main/playbooks/v1-host.yml)
+for check/diff and both applies, with `-K` and the same local identity overrides
+as [step 2c](SETUP.md#2c-reconcile-the-existing-laptop-target-stop-before-claiming-v1).
+It includes `lab.yml` (foundation, Sway, Looking Glass), managed
+Hyprland/Quickshell staging and the sleep guard. Staging selects no Ly default,
+starts no compositor and proves no login. Fresh managed Hyprland login, Sway
+recovery and VFIO inhibitor observations remain separate physical gates.
+
+## Does a prepared campaign mean v1 is qualified?
+
+No. The [v3 campaign and runbook](https://github.com/importriri/hyperlab-ansible/blob/main/docs/release-evidence.md)
+prepare the selected v1 gates; qualification is pending. V2 is historical and
+cannot qualify v1, and prior passes cannot be imported. Software fixtures are
+not laptop observations. Both compatibility profiles remain `pipeline-pending`.
 
 ## Will this erase my disk, and can I undo it?
 
@@ -59,15 +80,23 @@ Only one running VM owns it at a time; several shut-off definitions may name it.
 Services can use it only through reviewed policy and a matching Template/spec.
 The clean → dev → dirty → lab ladder only lowers within a host boot. Returning
 to a cleaner use needs a host reboot; a GPU reset is no sanitization proof.
-The optional per-run lease is Proposed and unimplemented, so do not assume an
-existing workstation can freely switch device shape. Never clear the live trust
+The optional per-run lease design is
+[Accepted in ADR 0019](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md),
+but its controls are not built. The initial scope is `workstation-dev-standard`
+only, default without the dedicated NVIDIA GPU. Its draft Template first needs
+a sealed image/session working in both shapes, Create acceptance on Nitro, and
+the physical GPU → no-GPU → GPU transition evidence. Separate implementation
+is still required; existing VFIO Machines always start with the GPU. Never
+assume an existing workstation can switch shape or clear the live trust
 record. See [GPU boundaries](SETUP.md#6-use-the-dgpu-through-vfio).
 
 ## Are disposable Machines ready for untrusted browsing?
 
 No qualified usable disposable path is claimed. Transient disk discard is
-software-verified, but repeated-boot agent closure, new SSH pins and real
-stop/start/crash observations remain open. Discarding a disk proves nothing
+software-verified, as are restricted-agent startup and SSH pin refresh on
+managed start. A fresh restricted seed and real stop/start/crash/access
+observations on the frozen commits remain open; host apply does not upgrade
+existing seeds. Discarding a disk proves nothing
 about GPU state or network isolation. Do not bypass an agent/pin failure with
 manual key acceptance or disabled checking. See
 [the lifecycle stop](SETUP.md#5-exercise-explicit-vm-lifecycle).

@@ -6,11 +6,39 @@ workloads → evidence here. Start with a disposable rehearsal, then a backed-up
 machine. This guide documents the implemented route and its stops; **there is
 no qualified complete v1 installation path today**.
 
-The intended primary distribution is a project installer ISO, still pending.
+The intended primary distribution is a project installer ISO; its release is
+still pending.
 The [ISO proposal](https://github.com/importriri/arch-bootstrap/blob/main/docs/adr/0001-iso-build-and-distribution.md)
-is Proposed; no profile, build, image, signature or download is available. Use
-upstream archiso and the repositories below. See [FAQ](FAQ.md) and
+remains Proposed, with a development profile and
+[recorded development result](https://github.com/importriri/arch-bootstrap/blob/main/iso/README.md):
+two builds have matching package manifests but unequal image bytes. The cache
+and timestamp mismatch is diagnosed there; both images remain development-only,
+unsigned and ineligible for signing. No payload is admitted for redistribution
+and no public download exists. Use the authenticated upstream Arch Linux medium
+and the repositories below. See [FAQ](FAQ.md) and
 [symptom-based troubleshooting](TROUBLESHOOTING.md).
+
+## Current software boundaries
+
+These states describe the implemented route, not new hardware passes. The host
+target exists; desktop login, workload readiness and qualification remain
+separate observations. The linked sources record the details without pinning
+transient development artefact names or selecting a release pair here.
+
+| Item | Current state | Evidence |
+| --- | --- | --- |
+| v1 host composition | `lab.yml`; `host-desktop-hyprland.yml`; `host-sleep-guard.yml` | [v1 host target](https://github.com/importriri/hyperlab-ansible/blob/main/playbooks/v1-host.yml) |
+| Desktop staging | `no Ly default`; `no compositor start`; `no login proof` | [v1 host target](https://github.com/importriri/hyperlab-ansible/blob/main/playbooks/v1-host.yml) |
+| Installer ISO | `development-only`; `unsigned`; `signing-ineligible` | [Development result](https://github.com/importriri/arch-bootstrap/blob/main/iso/README.md) |
+| ISO comparison | `two builds`; `matching manifests`; `unequal image bytes`; `mismatch diagnosed` | [Development comparison](https://github.com/importriri/arch-bootstrap/blob/main/iso/README.md) |
+| ISO distribution | `no admitted payload`; `no public download` | [Distribution stops](https://github.com/importriri/arch-bootstrap/blob/main/iso/README.md) |
+| GPU lease design | `accepted`; `workstation-dev-standard only`; `default without dedicated GPU` | [ADR 0019](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md) |
+| GPU lease controls | `not built` | [ADR 0019](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md) |
+| Lease prerequisites | `image pending`; `Create pending`; `physical transition pending` | [ADR 0019](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md) |
+| v1 acceptance | `v3 prepared`; `qualification pending` | [Release evidence](https://github.com/importriri/hyperlab-ansible/blob/main/docs/release-evidence.md) |
+| v2 acceptance | `historical` | [Release evidence](https://github.com/importriri/hyperlab-ansible/blob/main/docs/release-evidence.md) |
+| Nitro full pipeline | `pipeline-pending` | [Compatibility matrix](hardware/compatibility.yml) |
+| Predator full pipeline | `pipeline-pending` | [Compatibility matrix](hardware/compatibility.yml) |
 
 ## Before the live prompt
 
@@ -125,7 +153,7 @@ means downloads, tests and reboots. Slow links and learning add time.
 | Enrollment review and two first boots | 20–60 min | 5–15 min |
 | Step 2 account transition and existing host target | 20–45 min | 20–90 min |
 | Step 3 network review and step 9 evidence review | 10–25 min | 0–10 min |
-| Steps 4–8, full v1 host, Create/provision, GPU lease and qualification | Blocked or prerequisite-dependent | No completion estimate |
+| Steps 4–8, images, Create/provision, GPU lease and qualification | Blocked or prerequisite-dependent | No completion estimate |
 
 Total for the existing host route only: **95–230 min active + 55–225 min waiting**
 (about 2½–7½ hours elapsed, sequentially). This is not a time-to-v1 claim.
@@ -466,31 +494,36 @@ below is not that profile's qualification route.
 
 ```bash
 ansible-playbook -K playbooks/preflight.yml -e "@$LAB_VARS"
-ansible-playbook -K playbooks/lab.yml --check --diff -e "@$LAB_VARS"
-ansible-playbook -K playbooks/lab.yml -e "@$LAB_VARS"
-ansible-playbook -K playbooks/lab.yml -e "@$LAB_VARS"
+ansible-playbook -K playbooks/v1-host.yml --check --diff -e "@$LAB_VARS"
+ansible-playbook -K playbooks/v1-host.yml -e "@$LAB_VARS"
+ansible-playbook -K playbooks/v1-host.yml -e "@$LAB_VARS"
 ```
 
 Expect no failed/unreachable tasks and final `changed=0`. Stop on failures,
 unreviewed boot changes or nonzero repeat changes. Review the managed VFIO boot
 entry and its recovery entry before the next reboot.
 
-The `playbooks/lab.yml` run in step 2 already installed Sway, then the host-side
-Looking Glass transport. Its actual import is `foundation.yml`, followed by
-`host_desktop_common`, `host_desktop_sway` and `looking_glass` with their guards.
-The narrow `host-desktop-sway.yml` and `looking-glass.yml` playbooks are maintenance
-entrypoints, not additional installation stages. Host convergence creates no
-private image, Machine or service workload.
+The existing [v1 host target](https://github.com/importriri/hyperlab-ansible/blob/main/playbooks/v1-host.yml)
+composes `lab.yml`, `host-desktop-hyprland.yml` with its managed-session lifecycle
+enabled, and `host-sleep-guard.yml`. The `lab.yml` component supplies
+`foundation.yml`, then `host_desktop_common`, `host_desktop_sway` and
+`looking_glass` with their guards: Sway and the host-side Looking Glass transport
+are already included. The Hyprland component stages managed Hyprland/Quickshell
+and Sway recovery sessions; the sleep guard prepares the VFIO sleep inhibitor.
+An apply can refresh an already running managed shell. Staging selects no Ly
+default, starts no compositor and proves no login. The narrow desktop and
+Looking Glass playbooks remain maintenance entrypoints, not extra installation
+stages. Host convergence creates no private image, Machine or service workload.
 
 **Product stop:** Hyprland is preferred and Sway remains a first-class recovery
-compositor in the product contract. `lab.yml` does **not** assemble the complete
-v1 Hyprland/session/Create target. `host-desktop-hyprland.yml` is explicitly a
-non-active configuration/staging target outside `lab.yml`; assembling narrow
-roles manually does not qualify v1. Wait for an accepted integrated host
-entrypoint, its check/apply/apply results, and installed-session/Create evidence.
-Do not guess a playbook name. The
+compositor in the product contract. A successful `v1-host.yml` check/apply/apply
+is host convergence, not complete v1 acceptance. Separately observe a fresh
+managed Hyprland login with one shell, logout and managed Sway recovery, then
+the sleep inhibitor while a real VFIO guest runs and its removal after shutdown.
+Keep these physical observations separate from installed-session/Create
+acceptance and from source checks. The
 [roadmap](https://github.com/importriri/hyperlab-ansible/blob/main/docs/roadmap.md#v1-scope-and-evidence-status)
-records provisioning, disposable, lease and release-manifest gaps separately.
+records provisioning, disposable, lease and qualification gaps separately.
 The later sections explain those conditional boundaries, not a bypass of this
 stop.
 
@@ -657,10 +690,12 @@ route, and stop if an action cannot retain the chosen identity.
 
 **Product stop:** CLI history does not qualify shell Create. The runner/Create
 view have software contracts; real shell provisioning remains unqualified.
-Disposable disk discard exists in source, but agent restriction and SSH host-key
-renewal at each later boot are unresolved. Do not use a disposable Machine as a
-safe access/recovery path today or claim that repeating inventory closes this
-gap. See the [current scope](https://github.com/importriri/hyperlab-ansible/blob/main/docs/roadmap.md#v1-scope-and-evidence-status).
+Disposable disk discard, restricted-agent startup and SSH pin refresh on managed
+start are software-verified. A fresh restricted seed and physical discard/access
+observations on the frozen commits remain prerequisites; a host apply does not
+upgrade existing seeds. Do not use a disposable Machine as a qualified safe
+access/recovery path today or claim that repeating inventory closes this gate.
+See the [current scope](https://github.com/importriri/hyperlab-ansible/blob/main/docs/roadmap.md#v1-scope-and-evidence-status).
 
 ## 6. Use the dGPU through VFIO
 
@@ -676,9 +711,17 @@ Only one running VM may own the dGPU; multiple shut-off definitions may name it.
 reviewed handoff profile and matching spec/Template. Within a boot GPU uses go
 clean → dev → dirty → lab, never back up; a higher-trust use after a lower one
 requires a host reboot. A reset does not prove erasure of GPU state. Never delete
-or reset the live trust record. The optional per-run GPU lease is Proposed and
-unimplemented; it does not make arbitrary Templates usable both with/without
-GPU. See [GPU policy](https://github.com/importriri/hyperlab-ansible/blob/main/docs/gpu-handoff-policy.md).
+or reset the live trust record. The optional per-run GPU lease design is
+Accepted in [ADR 0019](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0019-gpu-lease.md),
+initially for `workstation-dev-standard` only, defaulting to no dedicated NVIDIA
+GPU. The controls are **not built**: existing VFIO Machines still start with
+the GPU every time. The draft Template needs a sealed image with a working
+session in both shapes, then Create accepted on Nitro; the physical
+GPU → no-GPU → GPU transition in one host boot must prove Looking Glass on GPU
+runs, SPICE without GPU and the ladder after each run. These prerequisites and
+separate lease implementation remain open. No lease command is available, and
+design acceptance makes no arbitrary Template usable in both shapes. See
+[GPU policy](https://github.com/importriri/hyperlab-ansible/blob/main/docs/gpu-handoff-policy.md).
 Keep the managed PCIe power-management workaround; do not reproduce the known
 [freeze](problems/gpu-freeze-power-management.md).
 
@@ -773,10 +816,16 @@ campaign. Record this evidence repository's publishing revision separately;
 it is not a third hardware input. Nitro requires clean installation, two boots,
 correct storage, full intended host check/apply/apply (`changed=0`), isolation,
 server/Machine lifecycle, real video/input/audio, reboot/cold-start/recovery and
-reviewed evidence. Existing v2 release gates omit selected v1 requirements;
-passing them alone cannot qualify v1. Full install acceptance, software remedies,
-complete provenance/rights review, private-reporting activation and the future
-ISO remain dependencies. See [security scope](FAQ.md#what-security-does-this-provide).
+reviewed evidence. The separate `release/acceptance.v3.yml` and its CLI/fixtures
+prepare a pending v1 campaign; [ADR 0063](https://github.com/importriri/hyperlab-ansible/blob/main/docs/adr/0063-v1-acceptance-campaign.md)
+remains Proposed. Follow the [release evidence runbook](https://github.com/importriri/hyperlab-ansible/blob/main/docs/release-evidence.md)
+for the selected scope and order. V2 is historical and cannot qualify v1;
+neither its passes nor earlier observations can be imported as v3 passes.
+Full install acceptance, software remedies, complete provenance/rights review
+and private-reporting activation remain open. The development ISO has its own
+signing/distribution and physical gates; it is not needed to follow the upstream
+medium route here. Existing gates 1–3, 6, 9 and 14 remain distinct; this guide
+closes none of them. See [security scope](FAQ.md#what-security-does-this-provide).
 
 **Predator:** only after Nitro qualification, replay the **same automation pair**
 with `predator-3070`, its real PCI/group/storage observations and separate display,
